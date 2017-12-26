@@ -4,7 +4,6 @@ var M = 200;
 
 
 function grid_main(){
-  console.log("call main");
   mydata = generateGrid(); //is an array[N*M] 
   var svg1 = d3.select('#svg1');
   svg1.attr('width',N*sq).attr('height',M*sq);
