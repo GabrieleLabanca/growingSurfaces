@@ -10,82 +10,25 @@
     </style>
     <meta charset="utf-8">
     <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+    <script type="text/javascript" src="js/grid.js"></script>
+
   </head>
   <body>
     <svg class="svgc" id="svg1"></svg>
 
     <script type="text/javascript">
-var sq = 10;
-var N = 100;
-var M = 200;
 
-
-window.onload = function(){
-  var mydata = generateGrid();
-  var svg1 = d3.select('#svg1');
-  svg1.attr('width',N*sq).attr('height',M*sq);
-  render(svg1,mydata);
-
-  setInterval(step,1000/15,svg1,mydata);
-};
+for(var n=0; n<10; n++){
+  for(var m=0; m<10; m++){
+  }
+}
 
 function step(svg1,mydata){
-  update(mydata);
+  //sequential_update(mydata);
+  random_deposition_update(mydata);
+  
   animation(svg1,mydata);
 }
-
-
-function render(svg1,mydata){
-  svg1.selectAll('rect')
-    .data(mydata)
-    .enter()
-    .append('rect')
-    .attr("width",function(d){ return sq;})
-    .attr("height",function(d){ return sq; })
-    .attr("fill",function(d){ return associateColor(d.status);})
-    .attr("x",function(d){ return d.x;})
-    .attr("y",function(d){ return d.y;});
-}
-
-function update(arr){
-  if( typeof update.counter == 'undefined' ) {
-    update.counter = 0;
-  }
-  arr[update.counter].status="full";
-  update.counter++;
-
-
-}
-
-function animation(svg1,mydata){
-  svg1.selectAll('rect')
-    .data(mydata)
-    .transition()
-    .attr("width",function(d){ return sq;})
-    .attr("height",function(d){ return sq; })
-    .attr("fill",function(d){ return associateColor(d.status);})
-    .attr("x",function(d){ return d.x;})
-    .attr("y",function(d){ return d.y;});
-
-
-}
-
-function generateGrid(){
-  var grid = [];
-  var y = -1;
-  for(var i=0; i<(N*M); i++){
-            if(i%N == 0) y++;
-            grid.push(new Object({"index":i,"x":i%N,"y":y,"status":"void"}));
-            }
-            return grid;
-            }
-
-            function associateColor(S){
-            if(S === "void") return 'grey';
-            if(S === "full") return 'red';
-            }
-
-
 
     </script>
   </body>
