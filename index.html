@@ -9,24 +9,79 @@
 }
     </style>
     <meta charset="utf-8">
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+    <!-- Bootstrap Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Bootstrap Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Awesome fonts (icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- D3 library -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!-- grid functions -->
     <script type="text/javascript" src="js/grid.js"></script>
-
+    <script type="text/javascript" src="js/grid_navigation.js"></script>
   </head>
   <body>
-    <svg class="svgc" id="svg1"></svg>
+
+    <div id="main" class="container">
+      <div class="container col-sm-6">
+        <div class="jumbotron" id="header">
+          <div class="" id="logo">
+            <h1>growingSurfaces
+              <small>by <a href="http://gabrielelabanca.github.io/">Gabriele Labanca</a></small>
+            </h1>
+          </div>
+          <div style="clear:both"></div>
+          <div class="text-info">
+            <a href="https://github.com/GabrieleLabanca/growingSurfaces">See github</a>
+          </div>
+          <div style="clear:both"></div>
+        </div>
+        <div class="">
+          <div>
+            <button id="RD">random deposition</button>
+            <button id="BD">ballistic deposition</button>
+          </div>
+          <div id="describe-project">
+            <p>
+            Inspired by <a href="http://barabasi.com/book/fractal-concepts-in-surface-growth">Fractal Concepts in Surface Growth</a> by <a href="http://barabasi.com">Barabasi</a> and <a href="http://physics.bu.edu/people/show/68">Stanley</a>.
+            <br>
+            This simple model simulates a growing surfaces with basic algorithms (which can be switched with the buttons):
+            <ul>
+              <li><b>random deposition</b>: a random column is chosen, then incremented, such as a particle fell on it;</li>
+              <li><b>ballistic deposition</b>: this simulates a somehow "sticky" particle, which will stop its falling if it gets in contact with a higher column near the chosen one.</li>
+            </ul>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="container col-sm-6">
+        <div><svg class="svgc" id="svg1" width="100" height="200"></svg></div>
+        <div><p><br></p></div>
+      </div>
+
+
+    </div>
 
     <script type="text/javascript">
+//global variable to choose type of deposition
+var global_choose_deposition;
+var mydata; //have to declare it global to clear
 
-for(var n=0; n<10; n++){
-  for(var m=0; m<10; m++){
-  }
+window.onload=function(){
+  load_listeners();
+  grid_main();
 }
 
+
 function step(svg1,mydata){
-  //sequential_update(mydata);
-  random_deposition_update(mydata);
-  
+  console.log("call step");
+  /* DEPOSITION MODE
+   * define a *_update(mydata) function
+   *  for index value, use getn(n,m) -> corresponding index of array
+   */
+  if(global_choose_deposition == 'RD'){ random_deposition_update(mydata); }
+  if(global_choose_deposition == 'BD'){ ballistic_deposition_update(mydata); }
   animation(svg1,mydata);
 }
 

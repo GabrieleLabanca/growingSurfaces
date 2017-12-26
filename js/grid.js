@@ -1,15 +1,17 @@
-var sq = 10;
+var sq = 3;
 var N = 100;
 var M = 200;
 
 
-window.onload = function(){
-  var mydata = generateGrid(); //is an array[N*M] 
+function grid_main(){
+  console.log("call main");
+  mydata = generateGrid(); //is an array[N*M] 
   var svg1 = d3.select('#svg1');
   svg1.attr('width',N*sq).attr('height',M*sq);
   render(svg1,mydata);
+  switch_RD(); // start with random deposition
 
-  setInterval(step,1000/15,svg1,mydata); // step defined in index.html
+  setInterval(step,100/15,svg1,mydata); // step defined in index.html
 };
 
 
@@ -19,11 +21,20 @@ function render(svg1,mydata){
     .data(mydata)
     .enter()
     .append('rect')
-    .attr("width",function(d){ return sq;})
+    /*.attr("width",function(d){ return sq;})
     .attr("height",function(d){ return sq; })
-    .attr("fill",function(d){ return associateColor(d.status);})
+    .attr("fill",function(d){ return associateColor(d.status);})*/
     .attr("x",function(d){ return sq*d.x;})
     .attr("y",function(d){ return sq*d.y;});
+}
+
+
+function clear_grid(){
+  for(var n=0; n<N; n++){
+    for(var m=0; m<M; m++){
+      mydata[getn(n,m)].status = 'void';
+    }
+  }
 }
 
 function sequential_update(arr){
@@ -53,6 +64,15 @@ function random_deposition_update(arr){
   arr[getn(rnd,col_h(arr,rnd)+1)].status = 'full';
 }
 
+function ballistic_deposition_update(arr){
+  var rnd = Math.floor(Math.random()*N);
+  // now select max in neighbourhood of n=rnd
+  var H = col_h(arr,rnd)+1;
+  if(rnd<N-1){ H = H > col_h(arr,rnd+1) ? H : col_h(arr,rnd+1); }
+  if(rnd>0){ H = H > col_h(arr,rnd-1) ? H : col_h(arr,rnd-1); }
+  arr[getn(rnd,H)].status = 'full';
+}
+
 
 function col_h(arr,n){ // get height of n-th column
   var h = M;
@@ -68,7 +88,6 @@ function col_h(arr,n){ // get height of n-th column
 function animation(svg1,mydata){
   svg1.selectAll('rect')
     .data(mydata)
-    .transition()
     .attr("width",function(d){ return sq;})
     .attr("height",function(d){ return sq; })
     .attr("fill",function(d){ return associateColor(d.status);})
@@ -87,14 +106,14 @@ function generateGrid(){
 }
 
 function associateColor(S){
-  if(S === "void") return 'grey';
-  if(S === "full") return 'red';
+  if(S === "void") return 'white';
+  if(S === "full") return 'midnightblue';
 }
 
 function getn(n,m){ // converts (x,y) position into index
   return N*M-(N-n+m*N); // (0,0) is bottom-left
 
-    ////N*M-1-(n+m*N); //OLD
+  ////N*M-1-(n+m*N); //OLD
 }
 
 
