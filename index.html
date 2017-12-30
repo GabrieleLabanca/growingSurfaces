@@ -3,7 +3,7 @@
   <head>
     <style>
 .svgc {
-  position: absolute;
+  position: static;
   left: 10px;
   top: 10px;
 }
@@ -22,6 +22,7 @@
     <!-- grid functions -->
     <script type="text/javascript" src="js/grid.js"></script>
     <script type="text/javascript" src="js/grid_navigation.js"></script>
+    <script type="text/javascript" src="js/graph.js"></script>
   </head>
   <body>
 
@@ -58,7 +59,19 @@
         </div>
       </div>
       <div class="container col-sm-6">
+        <div><table style="width:100%">
+            <tr>
+              <th>Mean height</th>
+              <th id="mean_height"></th>
+            </tr>
+            <tr>
+              <th>Interface width</th>
+              <th id="interface_width"></th>
+            </tr>            
+          </table></div>
         <div><svg class="svgc" id="svg1" width="100" height="200"></svg></div>
+        <div><svg class="svgc" id="svg_graph_mw" width="100" height="200"></svg></div>
+        <div><svg class="svgc" id="svg_graph_iw" width="100" height="200"></svg></div>
         <div><p><br></p></div>
       </div>
 

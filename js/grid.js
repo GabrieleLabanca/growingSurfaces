@@ -1,6 +1,6 @@
 var sq = 3;
-var N = 100;
-var M = 200;
+var N = 150;
+var M = 190;
 
 
 function grid_main(){
@@ -42,6 +42,7 @@ function sequential_update(arr){
   }
   arr[sequential_update.counter].status="full";
   sequential_update.counter--;
+  update_stats(arr);
 }
 
 function block_update(arr){
@@ -56,11 +57,13 @@ function block_update(arr){
     }
     this.already = 1;
   }
+  update_stats(arr);
 }
 
 function random_deposition_update(arr){
   var rnd = Math.floor(Math.random()*N);
   arr[getn(rnd,col_h(arr,rnd)+1)].status = 'full';
+  update_stats(arr);
 }
 
 function ballistic_deposition_update(arr){
@@ -70,17 +73,34 @@ function ballistic_deposition_update(arr){
   if(rnd<N-1){ H = H > col_h(arr,rnd+1) ? H : col_h(arr,rnd+1); }
   if(rnd>0){ H = H > col_h(arr,rnd-1) ? H : col_h(arr,rnd-1); }
   arr[getn(rnd,H)].status = 'full';
+  update_stats(arr);
 }
 
+var s_data = [];
+function update_stats(arr){
+  if(this.counter === undefined){ this.counter = 0; }
+  if(this.index === undefined){ this.index = 0;  }
+  var m_h = mean_height(arr);
+  var i_w = interface_w(arr);
+  if(this.counter%150 === 0){
+      s_data.push( new Object(
+            {"index":this.index,"m_h":m_h.toPrecision(4),"i_w":i_w.toPrecision(4)}
+            ));
+  }
+  document.getElementById('mean_height').innerHTML = m_h.toPrecision(2);
+  document.getElementById('interface_width').innerHTML = i_w.toPrecision(2);
+  this.index++;
+  this.counter++;
+}
 
 function col_h(arr,n){ // get height of n-th column
   var h = M;
   var this_full = false;
-  do{
+  while(h>0){
     h--;
     if(arr[getn(n,h)].status == 'full'){ break; }
-    if(h==0) return -1;
-  }while(h>0);
+    //if(h==0) return -1; WHY DID I DO IT?
+  }
   return h; 
 }
 
@@ -114,6 +134,49 @@ function getn(n,m){ // converts (x,y) position into index
 
   ////N*M-1-(n+m*N); //OLD
 }
+
+
+function mean_height(grid){
+  var line = get_interface(grid);
+  return mean(line);
+}
+
+function interface_w(grid){
+  var line = get_interface(grid);
+  return mean_square_deviation(line);
+}
+
+function mean(line){ 
+  var L = line.length;
+  var mean = 0;
+  for(i in line){
+    mean += line[i];
+  }
+  return (mean / L);
+}
+
+function mean_square_deviation(line){
+  var L = line.length;
+  var sqrtmean = 0;
+  var mu = mean(line);
+  for(i in line){
+    sqrtmean += Math.pow((mu - line[i]),2);
+  }
+  sqrtmean = (sqrtmean / L);
+  return Math.sqrt(sqrtmean);
+}
+
+
+function get_interface(arr){
+  var line = [];
+  for(var n=0; n<N; n++){
+    line[n] = col_h(arr,n);
+  }
+  return line;
+}
+
+
+
 
 
 
