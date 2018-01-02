@@ -21,8 +21,8 @@ function render(svg1,mydata){
     .enter()
     .append('rect')
     /*.attr("width",function(d){ return sq;})
-    .attr("height",function(d){ return sq; })
-    .attr("fill",function(d){ return associateColor(d.status);})*/
+      .attr("height",function(d){ return sq; })
+      .attr("fill",function(d){ return associateColor(d.status);})*/
     .attr("x",function(d){ return sq*d.x;})
     .attr("y",function(d){ return sq*d.y;});
 }
@@ -78,20 +78,23 @@ function ballistic_deposition_update(arr){
 
 var s_data = [];
 function update_stats(arr){
-  if(this.counter === undefined){ this.counter = 0; }
   if(this.index === undefined){ this.index = 0;  }
   var m_h = mean_height(arr);
   var i_w = interface_w(arr);
-  if(this.counter%150 === 0){
-      s_data.push( new Object(
-            {"index":this.index,"m_h":m_h.toPrecision(4),"i_w":i_w.toPrecision(4)}
-            ));
+  if(this.index%50 === 0){
+    s_data.push( new Object(
+          {"index":this.index,"m_h":m_h.toPrecision(4),"i_w":i_w.toPrecision(4)}
+          ));
+    update_graph();
   }
   document.getElementById('mean_height').innerHTML = m_h.toPrecision(2);
   document.getElementById('interface_width').innerHTML = i_w.toPrecision(2);
   this.index++;
-  this.counter++;
 }
+function clear_stats(){
+  update_stats.index = 0;
+}
+
 
 function col_h(arr,n){ // get height of n-th column
   var h = M;

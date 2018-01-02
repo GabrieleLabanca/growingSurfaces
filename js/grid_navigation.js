@@ -9,7 +9,9 @@ function switch_RD(){
    // .innerHtml = "random deposition";
 }
 function switch_BD(){
-  clear_grid();   
+  clear_grid();  
+  clear_stats();
+  clear_graph();
   global_choose_deposition = 'BD';
   //document.getElementById("describe-deposition")
    // .innerHtml = "ballistic deposition";

@@ -1,24 +1,21 @@
-var x_offset = 0;
-var y_offset = 0;
-var thisData = mydata;
 var bin_w = 40;
-var x_scale = 1;
-var y_scale = 10;
+var x_domain_min = -50;
+var x_domain_max = 1000;
 var y_domain_min = 0;
-var y_domain_max = 200;
-var x_domain_min = new Date(2005, 1, 1);
-var x_domain_max = new Date(2016, 12, 31);
-var x_label = "anno", y_label = "superamenti";
+var y_domain_max = 10;
+var x_label = "index", y_label = "i_w";
 
-window.onload = function(){
-  var svg = d3.select("svg"),
+var x;
+var y;
+//svg1.attr('width',N*sq).attr('height',M*sq);
+
+function graphs(){
+  var svg = d3.select("svg#svg_graph_iw")
+    .attr('width',N*sq).attr('height',2/3*N*sq),
   margin = {top: 20, right: 40, bottom: 40, left: 0},
   width = +svg.attr("width") - margin.left - margin.right,
   height = +svg.attr("height") - margin.top - margin.bottom,
   main_g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")"); // parent of g and rects
-
-  //function scalex(x){ return x_scale*x - x_offset; }
-  //function scaley(y){ return y_scale*y - y_offset; }
 
   // AXES 
 
@@ -26,16 +23,15 @@ window.onload = function(){
 
   var formatNumber = d3.format(".1f");
 
-  var x = d3.scaleTime()
+  x = d3.scaleLinear()
     .domain([x_domain_min,x_domain_max])
     .range([0, width]);
 
-  var y = d3.scaleLinear()
+  y = d3.scaleLinear()
     .domain([y_domain_min,y_domain_max])
     .range([height, 0]);
 
-  var xAxis = d3.axisBottom(x)
-    .ticks(d3.timeYear);
+  var xAxis = d3.axisBottom(x);
 
   var yAxis = d3.axisRight(y)
     .tickSize(width)
@@ -43,7 +39,7 @@ window.onload = function(){
       var s = d;
       return this.parentNode.nextSibling
         ? s
-        : s + "\xa0giorni annuali di superamento del limite";
+        : s + "\xa0Interface width";
     });
 
 
@@ -57,7 +53,7 @@ window.onload = function(){
   function customXAxis(g) {
     g.call(xAxis);
     g.select(".domain").remove();
-    g.selectAll(".tick text").style("font-size","200%");;
+    g.selectAll(".tick text").style("font-size","100%");;
 
   }
 
@@ -66,13 +62,16 @@ window.onload = function(){
     g.select(".domain").remove();
     g.selectAll(".tick:not(:first-of-type) line").attr("stroke", "#777").attr("stroke-dasharray", "2,2");
     g.selectAll(".tick text").attr("x", 4).attr("dy", -4)
-      .style("font-size","200%");;
+      .style("font-size","100%");;
   }
 
+  // POINTS ARE ADDED IN update_graph()
 
-  // RECTS
 
-  bin_w = x(new Date(2006,1,1)); // a bin is one-year wide
+
+}
+
+function update_graph(){
   function get_x(d){
     return d[x_label];
   }
@@ -80,16 +79,25 @@ window.onload = function(){
     return d[y_label];
   }
 
-  main_g.selectAll("rect")
-    .data(thisData)
+
+  var svg = d3.select("svg#svg_graph_iw")
+    .selectAll("circle")
+    .data(s_data,function(d){return d["index"];})
     .enter()
-    .append("rect")
-    .attr("width",bin_w)
-    .attr("height",function(d){ return height - y(get_y(d)); })
+    .append("circle")
+    .attr("r",3)
     .attr("fill","red")
-    .attr("x",function(d){ return x(get_x(d));})
-    .attr("y",function(d){ return (y(get_y(d))); });
+    .attr("cx",function(d){ return x(get_x(d));})
+    .attr("cy",function(d){ return y(get_y(d)); });
 }
 
+function clear_graph(){
 
+  var svg = d3.select("svg#svg_graph_iw")
+    .selectAll("circle")
+    .remove();
+
+
+
+}
 
