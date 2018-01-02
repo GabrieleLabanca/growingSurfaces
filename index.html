@@ -23,27 +23,29 @@
     <script type="text/javascript" src="js/grid.js"></script>
     <script type="text/javascript" src="js/grid_navigation.js"></script>
     <script type="text/javascript" src="js/graphs.js"></script>
+    <script type="text/javascript" src="js/mersenne-twister.js"></script>
+    <!-- Mersenne Twistercode from https://gist.github.com/banksean/300494 -->
   </head>
   <body>
 
     <div id="main" class="container">
       <div class="container col-sm-6">
-        <div class="jumbotron" id="header">
-          <div class="" id="logo">
-            <h1>growingSurfaces
-              <small>by <a href="http://gabrielelabanca.github.io/">Gabriele Labanca</a></small>
-            </h1>
+        <div class="" id="">
+          <div class="page-header" id="">
+            <h2>growingSurfaces
+              <small>by <a href="http://gabrielelabanca.github.io/">Gabriele Labanca</a>          
+                <br>
+                <a href="https://github.com/GabrieleLabanca/growingSurfaces">See github</a></small>
+            </h2>
           </div>
-          <div style="clear:both"></div>
           <div class="text-info">
-            <a href="https://github.com/GabrieleLabanca/growingSurfaces">See github</a>
           </div>
           <div style="clear:both"></div>
         </div>
         <div class="">
           <div>
-            <button id="RD">random deposition</button>
-            <button id="BD">ballistic deposition</button>
+            <button class="btn btn-default" id="RD">random deposition</button>
+            <button class="btn btn-default" id="BD">ballistic deposition</button>
           </div>
           <div id="describe-project">
             <p>
@@ -55,10 +57,22 @@
               <li><b>ballistic deposition</b>: this simulates a somehow "sticky" particle, which will stop its falling if it gets in contact with a higher column near the chosen one.</li>
             </ul>
             </p>
+            <h4>What to expect</h4>
+            <p>
+            Since the random deposition model does not introduce any correlation (as long as there are none in the random number generation), the <b>surface width</b> (here defined as a random mean square deviation) is expected to grow indefinitely.
+            However, when a correlation is introduced, as it is done switching to a ballistic deposition model, it is expected to have a <b>saturation</b>, that is an halt in the thickening of the surface.
+
+            <p class="alert alert-info">
+            By now, the saturation is not yet visible. I will be working on this issue.
+            </>
+            </p>
           </div>
         </div>
       </div>
       <div class="container col-sm-6">
+        <div><svg class="svgc" id="svg1" width="100" height="200"></svg></div>
+        <div><svg class="svgc" id="svg_graph_iw" width="100" height="200"></svg></div>
+        <!--button id="clear_graph">clear graph</button-->
         <div><table style="width:100%">
             <tr>
               <th>Mean height</th>
@@ -69,9 +83,7 @@
               <th id="interface_width"></th>
             </tr>            
           </table></div>
-        <div><svg class="svgc" id="svg1" width="100" height="200"></svg></div>
-        <div><svg class="svgc" id="svg_graph_iw" width="100" height="200"></svg></div>
-        <div><p><br></p></div>
+          <div><p><br></p></div>
       </div>
 
 

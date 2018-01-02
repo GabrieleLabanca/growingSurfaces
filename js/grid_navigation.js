@@ -1,6 +1,7 @@
 function load_listeners(){
   document.getElementById("RD").addEventListener("click", switch_RD);
   document.getElementById("BD").addEventListener("click", switch_BD);
+  //document.getElementById("clear_graph").addEventListener("click", clear_graph);
 }
 function switch_RD(){
   clear_grid();

@@ -2,8 +2,12 @@ var sq = 3;
 var N = 150;
 var M = 190;
 
+var MT;
+//var randomNumber = m.random();
 
 function grid_main(){
+  MT = new MersenneTwister();
+
   mydata = generateGrid(); //is an array[N*M] 
   var svg1 = d3.select('#svg1');
   svg1.attr('width',N*sq).attr('height',M*sq);
@@ -61,38 +65,45 @@ function block_update(arr){
 }
 
 function random_deposition_update(arr){
-  var rnd = Math.floor(Math.random()*N);
+  var rnd = Math.floor(MT.random()*N);
   arr[getn(rnd,col_h(arr,rnd)+1)].status = 'full';
+  arr[getn(rnd,col_h(arr,rnd)+1)].color = extractColor();
   update_stats(arr);
 }
 
 function ballistic_deposition_update(arr){
-  var rnd = Math.floor(Math.random()*N);
+  var rnd = Math.floor(MT.random()*N);
   // now select max in neighbourhood of n=rnd
   var H = col_h(arr,rnd)+1;
   if(rnd<N-1){ H = H > col_h(arr,rnd+1) ? H : col_h(arr,rnd+1); }
   if(rnd>0){ H = H > col_h(arr,rnd-1) ? H : col_h(arr,rnd-1); }
   arr[getn(rnd,H)].status = 'full';
+  arr[getn(rnd,H)].color = extractColor();
   update_stats(arr);
 }
 
 var s_data = [];
+var s_index = 0;
 function update_stats(arr){
-  if(this.index === undefined){ this.index = 0;  }
   var m_h = mean_height(arr);
   var i_w = interface_w(arr);
-  if(this.index%50 === 0){
+  if(s_index%50 === 0){
     s_data.push( new Object(
-          {"index":this.index,"m_h":m_h.toPrecision(4),"i_w":i_w.toPrecision(4)}
+          {"index":s_index,
+            "m_h":m_h.toPrecision(4),
+            "i_w":i_w.toPrecision(4),
+            "type":global_choose_deposition
+          }
           ));
     update_graph();
   }
   document.getElementById('mean_height').innerHTML = m_h.toPrecision(2);
   document.getElementById('interface_width').innerHTML = i_w.toPrecision(2);
-  this.index++;
+  s_index++;
 }
 function clear_stats(){
-  update_stats.index = 0;
+  s_index = 0;
+  s_data = [];
 }
 
 
@@ -109,10 +120,10 @@ function col_h(arr,n){ // get height of n-th column
 
 function animation(svg1,mydata){
   svg1.selectAll('rect')
-    .data(mydata)
+    .data(mydata,function(d){ return d.index; })
     .attr("width",function(d){ return sq;})
     .attr("height",function(d){ return sq; })
-    .attr("fill",function(d){ return associateColor(d.status);})
+    .attr("fill",function(d){ return d.color;})
     .attr("x",function(d){ return sq*d.x;})
     .attr("y",function(d){ return sq*d.y;});
 }
@@ -122,14 +133,27 @@ function generateGrid(){
   var y = -1;
   for(var i=0; i<(N*M); i++){
     if(i%N == 0) y++;
-    grid.push(new Object({"index":i,"x":i%N,"y":y,"status":"void"}));
+    grid.push(new Object({
+      "index":i,
+      "x":i%N,
+      "y":y,
+      "status":"void",
+      "color":"white"
+    }));
   }
   return grid;
 }
 
-function associateColor(S){
-  if(S === "void") return 'white';
-  if(S === "full") return 'midnightblue';
+/*function associateColor(d){
+  if(d.status === "void") return 'white';
+  if(d.status === "full") return d.color;
+}*/
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+var c_index = 0;
+function extractColor(){
+  var col = color(Math.floor(c_index/(3*N))%10);
+  c_index++;
+  return col;
 }
 
 function getn(n,m){ // converts (x,y) position into index
