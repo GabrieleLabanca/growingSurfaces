@@ -5,6 +5,8 @@ function load_listeners(){
 }
 function switch_RD(){
   clear_grid();
+  clear_stats();
+  clear_graph();
   global_choose_deposition = 'RD';
   //document.getElementById("describe-deposition")
    // .innerHtml = "random deposition";

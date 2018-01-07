@@ -36,6 +36,7 @@ function clear_grid(){
   for(var n=0; n<N; n++){
     for(var m=0; m<M; m++){
       mydata[getn(n,m)].status = 'void';
+      mydata[getn(n,m)].color = "white";
     }
   }
 }
@@ -158,8 +159,6 @@ function extractColor(){
 
 function getn(n,m){ // converts (x,y) position into index
   return N*M-(N-n+m*N); // (0,0) is bottom-left
-
-  ////N*M-1-(n+m*N); //OLD
 }
 
 
