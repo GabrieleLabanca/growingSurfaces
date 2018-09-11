@@ -1,0 +1,50 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<script type="text/javascript" src="js/mersenne-twister.js"></script>
+<script>
+  ;
+//var randomNumber = m.random();
+
+MT = new MersenneTwister();
+var labels = [];
+var histo = [];
+nbin = 100;
+nthrow = 1000;
+for( var i=0; i<nbin; i++){
+  labels[i] = i;
+  histo[i] = 0;
+}
+for(var i=0; i<nthrow; i++){
+  var rnd = MT.random()*nbin;
+  var num = Math.floor(rnd)%nbin;
+  //console.log(num);
+  histo[num]++;
+}
+for(var i=0; i<nbin; i++){
+  histo[i] -= nthrow/nbin;
+}
+console.log(histo);
+
+
+</script><canvas id="myChart" width="100" height="100"></canvas>
+<script>
+  var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: '# of Votes',
+      data: histo,
+    }]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero:true
+        }
+      }]
+    }
+  }
+});
+</script>

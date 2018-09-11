@@ -46,6 +46,7 @@
           <div>
             <button class="btn btn-default" id="RD">random deposition</button>
             <button class="btn btn-default" id="BD">ballistic deposition</button>
+            <button class="btn btn-default" id="stop">STOP</button>
           </div>
           <div id="describe-project">
             <p>
@@ -53,8 +54,8 @@
             <br>
             This simple model simulates a growing surfaces with basic algorithms (which can be switched with the buttons):
             <ul>
-              <li><b>random deposition</b>: a random column is chosen, then incremented, such as a particle fell on it;</li>
-              <li><b>ballistic deposition</b>: this simulates a somehow "sticky" particle, which will stop its falling if it gets in contact with a higher column near the chosen one.</li>
+              <li><span ><b id="rndtitle">random deposition</b></span>: a random column is chosen, then incremented, such as a particle fell on it;</li>
+              <li><span id="baltitle"><b>ballistic deposition</b></span>: this simulates a somehow "sticky" particle, which will stop its falling if it gets in contact with a higher column near the chosen one.</li>
             </ul>
             </p>
             <h4>What to expect</h4>
@@ -106,8 +107,12 @@ function step(svg1,mydata){
    * define a *_update(mydata) function
    *  for index value, use getn(n,m) -> corresponding index of array
    */
-  if(global_choose_deposition == 'RD'){ random_deposition_update(mydata); }
-  if(global_choose_deposition == 'BD'){ ballistic_deposition_update(mydata); }
+  if(global_choose_deposition == 'RD'){ 
+    random_deposition_update(mydata); 
+  }
+  if(global_choose_deposition == 'BD'){ 
+    ballistic_deposition_update(mydata); 
+  }
   animation(svg1,mydata);
 }
 

@@ -17,8 +17,6 @@ function grid_main(){
   setInterval(step,100/15,svg1,mydata); // step defined in index.html
 };
 
-
-
 function render(svg1,mydata){
   svg1.selectAll('rect')
     .data(mydata)
@@ -30,7 +28,6 @@ function render(svg1,mydata){
     .attr("x",function(d){ return sq*d.x;})
     .attr("y",function(d){ return sq*d.y;});
 }
-
 
 function clear_grid(){
   for(var n=0; n<N; n++){
@@ -106,7 +103,6 @@ function clear_stats(){
   s_index = 0;
   s_data = [];
 }
-
 
 function col_h(arr,n){ // get height of n-th column
   var h = M;
@@ -200,9 +196,5 @@ function get_interface(arr){
   }
   return line;
 }
-
-
-
-
 
 
